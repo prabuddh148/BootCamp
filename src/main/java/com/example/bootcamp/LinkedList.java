@@ -3,8 +3,8 @@ package com.example.bootcamp;
 public class LinkedList {
 
     public static class ListNode {
-        int data;
-        ListNode next;
+        public int data;
+        public ListNode next;
 
         ListNode(int data) {
             this.data = data;
@@ -298,6 +298,77 @@ public class LinkedList {
         }
 
         return ans.next;
+
+    }
+
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+
+        if (headA == null || headB == null) {
+            return null;
+
+        }
+
+        ListNode a = headA;
+        ListNode b = headB;
+
+        while (a != b) {
+            a = (a == null) ? headB : a.next;
+            b = (b == null) ? headA : b.next;
+        }
+        return a;
+    }
+
+    public ListNode removeElements(ListNode head, int val) {
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode current = dummy;
+
+        while (current.next != null) {
+            if (current.next.data == val) {
+                current.next = current.next.next;
+            } else {
+                current = current.next;
+            }
+        }
+
+        return dummy.next;
+    }
+
+    public boolean isPalindrome(ListNode head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
+        // Build a reversed copy with new nodes, so the original list stays intact
+        ListNode reversed = null;
+        for (ListNode node = head; node != null; node = node.next) {
+            ListNode copy = new ListNode(node.data);
+            copy.next = reversed;
+            reversed = copy;
+        }
+
+        ListNode temp = head;
+        ListNode curr = reversed;
+
+        while (curr != null) {
+            System.out.println("Temp: " + temp.data);
+            System.out.println("Curr: " + curr.data);
+            if (temp.data != curr.data) {
+                return false;
+            }
+            temp = temp.next;
+            curr = curr.next;
+        }
+
+        return true;
+    }
+
+    public void deleteNode(ListNode node) {
+        if (node == null || node.next == null) {
+            return;
+        }
+        node.data = node.next.data;
+        node.next = node.next.next;
 
     }
 
