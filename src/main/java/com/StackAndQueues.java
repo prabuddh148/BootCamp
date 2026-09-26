@@ -157,4 +157,98 @@ public class StackAndQueues {
         return result;
     }
 
+    public int[] finalPrices(int[] prices) {
+        for (int i = 0; i < prices.length; i++) {
+            for (int j = i + 1; j < prices.length; j++) {
+                if (prices[j] <= prices[i]) {
+                    prices[i] -= prices[j];
+                    break;
+                }
+            }
+        }
+        return prices;
+    }
+
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> map = new HashMap<>();
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < nums2.length; i++) {
+            while (!stack.isEmpty() && nums2[i] > stack.peek()) {
+                map.put(stack.pop(), nums2[i]);
+            }
+            stack.push(nums2[i]);
+        }
+
+        for (int i = 0; i < nums1.length; i++) {
+            nums1[i] = map.getOrDefault(nums1[i], -1);
+        }
+
+        return nums1;
+    }
+
+    public int calPoints(String[] operations) {
+        Stack<Integer> stack = new Stack<>();
+        for (String op : operations) {
+
+            switch (op) {
+                case "+":
+                    int top = stack.pop();
+                    int newtop = top + stack.peek();
+                    stack.push(top);
+                    stack.push(newtop);
+                    break;
+
+                case "D":
+                    stack.push(2 * stack.peek());
+                    break;
+
+                case "C":
+                    stack.pop();
+                    break;
+
+                default:
+                    stack.push(Integer.valueOf(op));
+            }
+        }
+
+        return stack.stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public int[] asteroidCollision(int[] asteroids) {
+
+        Stack<Integer> Stack = new Stack<>();
+        for (int ast : asteroids) {
+            if (!Stack.isEmpty() && ast < 0) {
+                Stack.push(Math.max(Stack.pop(), ast));
+            } else if (!Stack.isEmpty() && ast == Stack.peek() * -1) {
+                Stack.pop();
+            }
+
+            else {
+                Stack.push(ast);
+            }
+        }
+
+        return Stack.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    public String clearDigits(String s) {
+        Stack<Character> stack = new Stack<>();
+
+        for (char c : s.toCharArray()) {
+            if (!stack.isEmpty() && Character.isDigit(c)) {
+                stack.pop();
+            } else {
+                stack.push(c);
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()) {
+            sb.append(stack.pop());
+        }
+
+        return sb.reverse().toString();
+
+    }
 }
