@@ -1,13 +1,15 @@
 package com.example.bootcamp;
 
+import java.util.List;
+
 public class LinkedList {
 
     public static class ListNode {
-        public int data;
+        public int val;
         public ListNode next;
 
-        ListNode(int data) {
-            this.data = data;
+        ListNode(int val) {
+            this.val = val;
             this.next = null;
         }
     }
@@ -29,7 +31,7 @@ public class LinkedList {
         ListNode current = head;
 
         while (current != null) {
-            sb.append(current.data);
+            sb.append(current.val);
             if (current.next != null) {
                 sb.append(" -> ");
             }
@@ -44,7 +46,7 @@ public class LinkedList {
 
         while (current != null && current.next != null) {
 
-            if (current.data == current.next.data) {
+            if (current.val == current.next.val) {
                 current.next = current.next.next;
             } else {
                 current = current.next;
@@ -64,7 +66,7 @@ public class LinkedList {
 
         ListNode mergedHead;
 
-        if (list1.data <= list2.data) {
+        if (list1.val <= list2.val) {
             mergedHead = list1;
             mergedHead.next = mergeTwoLists(list1.next, list2);
         } else {
@@ -178,10 +180,10 @@ public class LinkedList {
         }
 
         while (node.next != null) {
-            if (node.data > node.next.data) {
-                int temp = node.data;
-                node.data = node.next.data;
-                node.next.data = temp;
+            if (node.val > node.next.val) {
+                int temp = node.val;
+                node.val = node.next.val;
+                node.next.val = temp;
             }
             node = node.next;
 
@@ -283,12 +285,12 @@ public class LinkedList {
             int sum = carry;
 
             if (l1 != null) {
-                sum += l1.data;
+                sum += l1.val;
                 l1 = l1.next;
             }
 
             if (l2 != null) {
-                sum += l2.data;
+                sum += l2.val;
                 l2 = l2.next;
             }
 
@@ -325,7 +327,7 @@ public class LinkedList {
         ListNode current = dummy;
 
         while (current.next != null) {
-            if (current.next.data == val) {
+            if (current.next.val == val) {
                 current.next = current.next.next;
             } else {
                 current = current.next;
@@ -342,7 +344,7 @@ public class LinkedList {
         // Build a reversed copy with new nodes, so the original list stays intact
         ListNode reversed = null;
         for (ListNode node = head; node != null; node = node.next) {
-            ListNode copy = new ListNode(node.data);
+            ListNode copy = new ListNode(node.val);
             copy.next = reversed;
             reversed = copy;
         }
@@ -351,9 +353,9 @@ public class LinkedList {
         ListNode curr = reversed;
 
         while (curr != null) {
-            System.out.println("Temp: " + temp.data);
-            System.out.println("Curr: " + curr.data);
-            if (temp.data != curr.data) {
+            System.out.println("Temp: " + temp.val);
+            System.out.println("Curr: " + curr.val);
+            if (temp.val != curr.val) {
                 return false;
             }
             temp = temp.next;
@@ -367,9 +369,124 @@ public class LinkedList {
         if (node == null || node.next == null) {
             return;
         }
-        node.data = node.next.data;
+        node.val = node.next.val;
         node.next = node.next.next;
 
+    }
+
+    public static class BrowserHistory {
+
+        private static class Node {
+            String url;
+            Node prev, next;
+
+            public Node(String url) {
+                this.url = url;
+            }
+
+        }
+
+        public Node curr;
+
+        public BrowserHistory(String homepage) {
+            curr = new Node(homepage);
+
+        }
+
+        public void visit(String url) {
+            Node newNode = new Node(url);
+            curr.next = newNode;
+            newNode.prev = curr;
+            curr = newNode;
+
+        }
+
+        public String back(int steps) {
+            while (steps > 0 && curr.prev != null) {
+                curr = curr.prev;
+                steps--;
+            }
+            return curr.url;
+
+        }
+
+        public String forward(int steps) {
+            while (steps > 0 && curr.next != null) {
+                curr = curr.next;
+                steps--;
+            }
+            return curr.url;
+        }
+
+    }
+
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode prev = dummy;
+
+        while (prev.next != null && prev.next.next != null) {
+            ListNode first = prev.next;
+            ListNode second = prev.next.next;
+
+            first.next = second.next;
+            second.next = first;
+            prev.next = second;
+
+            prev = first;
+        }
+
+        return dummy.next;
+
+    }
+
+    public ListNode rotateRight(ListNode head, int k) {
+
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode oldTail = head;
+        int length = 1;
+        while (oldTail.next != null) {
+            oldTail = oldTail.next;
+            length++;
+        }
+        k = k % length;
+        if (k == 0) {
+            return head;
+        }
+        ListNode newTail = head;
+        for (int i = 0; i < length - k - 1; i++) {
+            newTail = newTail.next;
+        }
+        ListNode newHead = newTail.next;
+        newTail.next = null;
+        oldTail.next = head;
+        return newHead;
+
+    }
+
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode current = dummy;
+
+        while (current.next != null && current.next.next != null) {
+            if (current.next.val == current.next.next.val) {
+                int dup = current.next.val;
+                while (current.next != null && current.next.val == dup) {
+                    current.next = current.next.next; // skip every node with this value
+                }
+            } else {
+                current = current.next;
+            }
+        }
+        return dummy.next;
     }
 
 }

@@ -79,4 +79,50 @@ public class Strings {
         return max;
     }
 
+    public boolean checkIfPangram(String sentence) {
+        Set<Character> set = new HashSet<>();
+
+        for (char c : sentence.toCharArray()) {
+            set.add(c);
+        }
+
+        return set.size() == 26;
+
+    }
+
+    public int lengthOfLastWord(String s) {
+
+        String[] words = s.trim().split(" ");
+        return words[words.length - 1].length();
+
+    }
+
+    public String convertToTitle(int columnNumber) {
+
+        StringBuilder sb = new StringBuilder();
+
+        while (columnNumber > 0) {
+            columnNumber--;
+            int remainder = columnNumber % 26;
+            sb.append((char) (remainder + 'A'));
+            columnNumber /= 26;
+        }
+
+        return sb.reverse().toString();
+
+    }
+
+    public int titleToNumber(String columnTitle) {
+
+        int result = 0;
+
+        for (char c : columnTitle.toCharArray()) {
+            int value = c - 'A' + 1; // A=1, B=2, ..., Z=26
+            result = result * 26 + value;
+        }
+
+        return result;
+
+    }
+
 }

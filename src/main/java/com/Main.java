@@ -1,11 +1,14 @@
 package com;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 import com.example.bootcamp.Array;
 import com.example.bootcamp.LinkedList;
+import com.example.bootcamp.SlidingWindow;
 import com.example.bootcamp.StriverSheet;
 import com.example.bootcamp.Strings;
+import com.example.bootcamp.Trees;
 import com.example.bootcamp.TwoPointer;
 
 public class Main {
@@ -15,9 +18,11 @@ public class Main {
         // runArray();
         // runStackAndQueues();
         // runLinkedList();
-        // runStrings();
+        runStrings();
         // runTwoPointer();
-        runStriverSheet();
+        // runSlidingWindow();
+        // runStriverSheet();
+        // runTrees();
     }
 
     // --------------------------------Array------------------------------------------------------//
@@ -28,7 +33,8 @@ public class Main {
                 Arrays.toString(array.searchRange(new int[] { 5, 7, 7, 8, 8, 10 }, 8))); // [3, 4]
     }
 
-    // --------------------------------Stack and Queues------------------------------------------//
+    // --------------------------------Stack and
+    // Queues------------------------------------------//
     static void runStackAndQueues() {
         StackAndQueues sq = new StackAndQueues();
 
@@ -64,7 +70,8 @@ public class Main {
         System.out.println("Clear Digits: " + sq.clearDigits("cb34")); // ""
     }
 
-    // --------------------------------Linked List-----------------------------------------------//
+    // --------------------------------Linked
+    // List-----------------------------------------------//
     static void runLinkedList() {
         LinkedList list = new LinkedList();
 
@@ -82,7 +89,8 @@ public class Main {
         head = list.createLinkedList(new int[] { 1, 2, 3, 4, 5 });
         list.printList(list.removeNthFromEnd(head, 2)); // 1 -> 2 -> 3 -> 5
 
-        // A: 4 -> 1 -> 8 -> 4 -> 5, B: 5 -> 6 -> 1 -> 8 -> 4 -> 5 (shared tail starts at 8)
+        // A: 4 -> 1 -> 8 -> 4 -> 5, B: 5 -> 6 -> 1 -> 8 -> 4 -> 5 (shared tail starts
+        // at 8)
         LinkedList.ListNode common = list.createLinkedList(new int[] { 8, 4, 5 });
         LinkedList.ListNode headA = list.createLinkedList(new int[] { 4, 1 });
         LinkedList.ListNode headB = list.createLinkedList(new int[] { 5, 6, 1 });
@@ -90,10 +98,22 @@ public class Main {
         headB.next.next.next = common;
 
         LinkedList.ListNode intersection = list.getIntersectionNode(headA, headB);
-        System.out.println("Intersection Node: " + (intersection == null ? "none" : intersection.data)); // 8
+        System.out.println("Intersection Node: " + (intersection == null ? "none" : intersection.val)); // 8
 
         LinkedList.ListNode noIntersection = list.getIntersectionNode(l1, l2);
-        System.out.println("Intersection Node: " + (noIntersection == null ? "none" : noIntersection.data)); // none
+        System.out.println("Intersection Node: " + (noIntersection == null ? "none" : noIntersection.val)); // none
+
+        LinkedList.BrowserHistory history = new LinkedList.BrowserHistory("leetcode.com");
+        history.visit("google.com");
+        history.visit("facebook.com");
+        history.visit("youtube.com");
+        System.out.println("Back 1: " + history.back(1)); // facebook.com
+        System.out.println("Back 1: " + history.back(1)); // google.com
+        System.out.println("Forward 1: " + history.forward(1)); // facebook.com
+        history.visit("linkedin.com"); // clears forward history (youtube.com)
+        System.out.println("Forward 2: " + history.forward(2)); // linkedin.com
+        System.out.println("Back 2: " + history.back(2)); // google.com
+        System.out.println("Back 7: " + history.back(7)); // leetcode.com
     }
 
     // --------------------------------Strings---------------------------------------------------//
@@ -104,9 +124,16 @@ public class Main {
         System.out.println("Longest palindrome: " + strings.longestPalindrome("babad"));
         System.out.println("Longest consecutive: " +
                 strings.longestConsecutive(new int[] { 2, 20, 4, 10, 3, 4, 5 })); // 4
+
+        System.out.println("Pangram: " + strings.checkIfPangram("thequickbrownfoxjumpsoverthelazydog")); // true
+        System.out.println("Pangram: " + strings.checkIfPangram("leetcode")); // false
+        System.out.println("Pangram: " + strings.checkIfPangram("abcdefghijklmnopqrstuvwxyz")); // true
+        System.out.println("Pangram: " + strings.checkIfPangram("abcdefghijklmnopqrstuvwxy")); // false (no z)
+        System.out.println("Pangram: " + strings.checkIfPangram("a")); // false
     }
 
-    // --------------------------------Two Pointer-----------------------------------------------//
+    // --------------------------------Two
+    // Pointer-----------------------------------------------//
     static void runTwoPointer() {
         TwoPointer twoPointer = new TwoPointer();
 
@@ -114,12 +141,76 @@ public class Main {
         System.out.println("Reverse Str: " + twoPointer.reverseStr("abcdefg", 2)); // bacdfeg
     }
 
-    // --------------------------------Striver Sheet---------------------------------------------//
+    // --------------------------------Sliding
+    // Window--------------------------------------------//
+    static void runSlidingWindow() {
+        SlidingWindow slidingWindow = new SlidingWindow();
+
+        System.out.println("Char Replacement: " + slidingWindow.characterReplacement("ABAB", 2)); // 4
+        System.out.println("Char Replacement: " + slidingWindow.characterReplacement("AABABBA", 1)); // 4
+        System.out.println("Char Replacement: " + slidingWindow.characterReplacement("AAAA", 0)); // 4
+        System.out.println("Char Replacement: " + slidingWindow.characterReplacement("ABCDE", 1)); // 2
+        System.out.println("Char Replacement: " + slidingWindow.characterReplacement("BAAA", 0)); // 3
+        System.out.println("Char Replacement: " + slidingWindow.characterReplacement("AAAB", 1)); // 4
+
+    }
+
+    // --------------------------------Striver
+    // Sheet---------------------------------------------//
     static void runStriverSheet() {
         StriverSheet striver = new StriverSheet();
 
-        // Arrays: Medium
-        System.out.println("2Sum: " + Arrays.toString(striver.twoSum(new int[] { 2, 6, 5, 8, 11 }, 14))); // [1, 3]
-        System.out.println("2Sum: " + Arrays.toString(striver.twoSum(new int[] { 2, 6, 5, 8, 11 }, 15))); // [-1, -1]
+        // Arrays
+        // System.out.println("2Sum: " + Arrays.toString(striver.twoSum(new int[] { 2,
+        // 6, 5, 8, 11 }, 14))); // [1, 3]
+        // System.out.println("2Sum: " + Arrays.toString(striver.twoSum(new int[] { 2,
+        // 6, 5, 8, 11 }, 14))); // [1, 3]
+        // System.out.println("2Sum: " + Arrays.toString(striver.twoSum(new int[] { 2,
+        // 6, 5, 8, 11 }, 15))); // [-1, -1]
+        // System.out.println("Second Largest: " + striver.secondLargest(new int[] { 12,
+        // 35, 1, 10, 34, 1 })); // 34
+        // System.out.println("Second Largest: " + striver.secondLargest(new int[] { 10,
+        // 10, 10 })); // -1
+
+        // Sorted & Rotated: { input, expected (1 = true, 0 = false) }
+        int[][][] cases = {
+                { { 3, 4, 5, 1, 2 }, { 1 } }, // normal rotation
+                { { 2, 1, 3, 4 }, { 0 } }, // not a rotation
+                { { 1, 2, 3 }, { 1 } }, // already sorted (0 rotation)
+                { { 1 }, { 1 } }, // single element
+                { { 2, 1 }, { 1 } }, // two elements, drop at index 0
+                { { 5, 1, 2, 3, 4 }, { 1 } }, // drop right at the start
+                { { 3, 4, 5, 1 }, { 1 } }, // drop right at the end
+                { { 1, 1, 1 }, { 1 } }, // all duplicates
+                { { 2, 2, 1, 2 }, { 1 } }, // duplicates around the drop
+                { { 6, 10, 6 }, { 1 } }, // first == last
+                { { 5, 6, 1, 2 }, { 1 } }, // first != last + 1
+                { { 2, 3, 1, 4 }, { 0 } }, // one drop but last > first
+                { { 1, 3, 2 }, { 0 } }, // one drop, wraps wrong
+                { { 3, 1, 2, 1 }, { 0 } }, // two drops
+                { { 1, 2, 3, 1, 2, 3 }, { 0 } }, // repeated sorted block
+        };
+        for (int[][] c : cases) {
+            boolean expected = c[1][0] == 1;
+            boolean got = StriverSheet.checkSortedRotated(c[0]);
+            System.out.println((got == expected ? "PASS " : "FAIL ") + Arrays.toString(c[0])
+                    + " -> got " + got + ", expected " + expected);
+        }
+    }
+
+    // --------------------------------Trees------------------------------------------------------//
+    static void runTrees() {
+        Trees tree = new Trees();
+        Scanner sc = new Scanner(System.in);
+
+        // tree.insert(sc);
+        // tree.display();
+        sc.close();
+
+        Trees.BST bst = new Trees.BST();
+        for (int x : new int[] { 50, 30, 70, 20, 40, 60, 80, 30 }) // last 30 is a duplicate
+            bst.insert(x);
+        bst.display();
+        System.out.println("Height: " + bst.height()); // 3
     }
 }
