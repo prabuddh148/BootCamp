@@ -1,5 +1,8 @@
 package com.example.bootcamp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SlidingWindow {
 
     // Q1. Longest Repeating Character Replacement (LeetCode 424)
@@ -28,6 +31,54 @@ public class SlidingWindow {
         }
 
         return length;
+    }
+
+    // Q2. Count Occurrences of Anagrams (GFG)
+    // Count how many substrings of txt are anagrams of pat.
+    // Ex: txt = "forxxorfxdofr", pat = "for" -> 3, txt = "aabaabaa", pat = "aaba"
+    // -> 4
+    // Approach: fixed window of size pat.length(). Keep counts of pat's chars
+    // and how many distinct chars are still unmatched (distinct). Entering char
+    // decrements its count, leaving char increments it. distinct == 0 -> anagram.
+    // O(n) time, O(1) space (at most 26 keys).
+    public int search(String pat, String txt) {
+        int k = pat.length();
+
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < k; i++) {
+            map.put(pat.charAt(i), map.getOrDefault(pat.charAt(i), 0) + 1);
+        }
+
+        int distinct = map.size();
+        int left = 0;
+        int count = 0;
+
+        for (int right = 0; right < txt.length(); right++) {
+            char c = txt.charAt(right);
+            if (map.containsKey(c)) {
+                map.put(c, map.get(c) - 1);
+                if (map.get(c) == 0) {
+                    distinct--;
+                }
+            }
+
+            if (right - left + 1 == k) {
+                if (distinct == 0) {
+                    count++;
+                }
+
+                char out = txt.charAt(left);
+                if (map.containsKey(out)) {
+                    map.put(out, map.get(out) + 1);
+                    if (map.get(out) == 1) {
+                        distinct++;
+                    }
+                }
+                left++;
+            }
+        }
+
+        return count;
     }
 
 }
