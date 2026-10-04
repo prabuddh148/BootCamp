@@ -18,11 +18,11 @@ public class Main {
         // runArray();
         // runStackAndQueues();
         // runLinkedList();
-        runStrings();
+        // runStrings();
         // runTwoPointer();
         // runSlidingWindow();
         // runStriverSheet();
-        // runTrees();
+        runTrees();
     }
 
     // --------------------------------Array------------------------------------------------------//
@@ -200,17 +200,28 @@ public class Main {
 
     // --------------------------------Trees------------------------------------------------------//
     static void runTrees() {
-        Trees tree = new Trees();
         Scanner sc = new Scanner(System.in);
 
+        // Trees tree = new Trees();
         // tree.insert(sc);
         // tree.display();
+
+        // Trees.BST bst = new Trees.BST();
+        // for (int x : new int[] { 50, 30, 70, 20, 40, 60, 80, 30 }) // last 30 is a duplicate
+        //     bst.insert(x);
+        // bst.display();
+        // System.out.println("Height: " + bst.height()); // 3
+
+        // Try sorted input (10 20 30 40 50) to watch the AVL rotations keep it balanced
+        Trees.AVL avl = new Trees.AVL();
+        System.out.print("How many nodes? ");
+        int n = sc.nextInt();
+        System.out.print("Enter " + n + " values: ");
+        for (int i = 0; i < n; i++)
+            avl.insert(sc.nextInt());
         sc.close();
 
-        Trees.BST bst = new Trees.BST();
-        for (int x : new int[] { 50, 30, 70, 20, 40, 60, 80, 30 }) // last 30 is a duplicate
-            bst.insert(x);
-        bst.display();
-        System.out.println("Height: " + bst.height()); // 3
+        avl.display();
+        System.out.println("AVL Height: " + avl.height());
     }
 }
