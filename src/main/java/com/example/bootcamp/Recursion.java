@@ -153,4 +153,17 @@ public class Recursion {
         printPattern(n - 1);
     }
 
+    public int maxProfit(int[] prices) {
+        return maxProfit(prices, 0);
+    }
+
+    private int maxProfit(int[] prices, int index) {
+        if (index >= prices.length - 1) {
+            return 0;
+        }
+
+        int gain = Math.max(0, prices[index + 1] - prices[index]);
+        return gain + maxProfit(prices, index + 1);
+    }
+
 }

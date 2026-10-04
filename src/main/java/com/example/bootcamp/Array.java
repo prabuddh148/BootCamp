@@ -2,7 +2,9 @@ package com.example.bootcamp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Array {
     public int[] twoSum(int[] nums, int target) {
@@ -174,5 +176,33 @@ public class Array {
         }
 
         return index;
+    }
+
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (set.contains(num)) {
+                return true;
+            }
+            set.add(num);
+        }
+        return false;
+
+    }
+
+    public int singleNumber(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (set.contains(num)) {
+                set.remove(num);
+            } else {
+                set.add(num);
+            }
+        }
+
+        for (int num : set) {
+            return num;
+        }
+        return -1;
     }
 }
