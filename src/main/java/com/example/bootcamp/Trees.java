@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import org.w3c.dom.Node;
-
 public class Trees {
 
     private static class Node {
@@ -215,11 +213,11 @@ public class Trees {
         }
 
         // Prints the tree top-down, e.g.
-        //        30
-        //     /      \
-        //    20      40
-        //   /  \       \
-        //  10  25      50
+        // 30
+        // / \
+        // 20 40
+        // / \ \
+        // 10 25 50
         public void display() {
             if (root == null) {
                 System.out.println("Tree is empty");
@@ -274,6 +272,147 @@ public class Trees {
                 return 0;
             }
             int w = String.valueOf(node.data).length();
+            return Math.max(w, Math.max(maxWidth(node.left), maxWidth(node.right)));
+        }
+
+        private static char[] blank(int n) {
+            char[] row = new char[n];
+            Arrays.fill(row, ' ');
+            return row;
+        }
+
+    }
+
+    public static class SegmentTree {
+
+        private static class SegmentTreeNode {
+            int start, end;
+            int sum;
+            SegmentTreeNode left, right;
+
+            public SegmentTreeNode(int start, int end) {
+                this.start = start;
+                this.end = end;
+                this.sum = 0;
+                this.left = null;
+                this.right = null;
+            }
+        }
+
+        SegmentTreeNode root;
+
+        public SegmentTree(int[] nums) {
+            root = buildTree(nums, 0, nums.length - 1);
+        }
+
+        private SegmentTreeNode buildTree(int[] nums, int start, int end) {
+            if (start > end) {
+                return null;
+            }
+
+            SegmentTreeNode node = new SegmentTreeNode(start, end);
+            if (start == end) {
+                node.sum = nums[start];
+            } else {
+                int mid = start + (end - start) / 2;
+                node.left = buildTree(nums, start, mid);
+                node.right = buildTree(nums, mid + 1, end);
+                node.sum = node.left.sum + node.right.sum;
+            }
+            return node;
+        }
+
+        // Sum of nums[qStart..qEnd] (both inclusive)
+        public int query(int qStart, int qEnd) {
+            return query(root, qStart, qEnd);
+        }
+
+        private int query(SegmentTreeNode node, int qStart, int qEnd) {
+            // No overlap
+            if (node == null || qEnd < node.start || qStart > node.end) {
+                return 0;
+            }
+
+            // Complete overlap: node's range lies fully inside the query
+            if (qStart <= node.start && node.end <= qEnd) {
+                return node.sum;
+            }
+
+            // Partial overlap: ask both children
+            return query(node.left, qStart, qEnd) + query(node.right, qStart, qEnd);
+        }
+
+        // Prints the tree top-down, each node as [start-end]=sum, e.g. for {1, 2, 3}
+        //         [0-2]=6
+        //       /         \
+        //   [0-1]=3     [2-2]=3
+        //   /    \
+        // [0-0]=1 [1-1]=2
+        public void display() {
+            if (root == null) {
+                System.out.println("Tree is empty");
+                return;
+            }
+
+            int h = height(root);
+            int cell = maxWidth(root) + 2;
+            int width = (1 << (h - 1)) * cell;
+
+            List<SegmentTreeNode> level = new ArrayList<>();
+            level.add(root);
+
+            for (int depth = 0; depth < h; depth++) {
+                int slots = 1 << depth;
+                int slotWidth = width / slots;
+                char[] values = blank(width);
+                char[] branches = blank(width);
+                List<SegmentTreeNode> next = new ArrayList<>();
+
+                for (int i = 0; i < slots; i++) {
+                    SegmentTreeNode node = level.get(i);
+                    int center = i * slotWidth + slotWidth / 2;
+
+                    if (node != null) {
+                        String s = label(node);
+                        int start = Math.max(0, center - s.length() / 2);
+                        s.getChars(0, s.length(), values, start);
+
+                        if (node.left != null) {
+                            branches[center - slotWidth / 4] = '/';
+                        }
+                        if (node.right != null) {
+                            branches[center + slotWidth / 4 - 1] = '\\';
+                        }
+                    }
+
+                    next.add(node == null ? null : node.left);
+                    next.add(node == null ? null : node.right);
+                }
+
+                System.out.println(new String(values).stripTrailing());
+                if (depth < h - 1) {
+                    System.out.println(new String(branches).stripTrailing());
+                }
+                level = next;
+            }
+        }
+
+        private String label(SegmentTreeNode node) {
+            return "[" + node.start + "-" + node.end + "]=" + node.sum;
+        }
+
+        private int height(SegmentTreeNode node) {
+            if (node == null) {
+                return 0;
+            }
+            return Math.max(height(node.left), height(node.right)) + 1;
+        }
+
+        private int maxWidth(SegmentTreeNode node) {
+            if (node == null) {
+                return 0;
+            }
+            int w = label(node).length();
             return Math.max(w, Math.max(maxWidth(node.left), maxWidth(node.right)));
         }
 

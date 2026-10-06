@@ -213,15 +213,36 @@ public class Main {
         // System.out.println("Height: " + bst.height()); // 3
 
         // Try sorted input (10 20 30 40 50) to watch the AVL rotations keep it balanced
-        Trees.AVL avl = new Trees.AVL();
-        System.out.print("How many nodes? ");
+        // Trees.AVL avl = new Trees.AVL();
+        // System.out.print("How many nodes? ");
+        // int n = sc.nextInt();
+        // System.out.print("Enter " + n + " values: ");
+        // for (int i = 0; i < n; i++)
+        //     avl.insert(sc.nextInt());
+        // sc.close();
+        //
+        // avl.display();
+        // System.out.println("AVL Height: " + avl.height());
+
+        // Each node shows [start-end]=sum of that range, e.g. try 1 2 3 4 5
+        System.out.print("How many elements? ");
         int n = sc.nextInt();
+        int[] nums = new int[n];
         System.out.print("Enter " + n + " values: ");
         for (int i = 0; i < n; i++)
-            avl.insert(sc.nextInt());
-        sc.close();
+            nums[i] = sc.nextInt();
 
-        avl.display();
-        System.out.println("AVL Height: " + avl.height());
+        Trees.SegmentTree segmentTree = new Trees.SegmentTree(nums);
+        segmentTree.display();
+
+        System.out.print("How many queries? ");
+        int q = sc.nextInt();
+        for (int i = 0; i < q; i++) {
+            System.out.print("Enter range (start end): ");
+            int start = sc.nextInt();
+            int end = sc.nextInt();
+            System.out.println("Sum [" + start + "-" + end + "]: " + segmentTree.query(start, end));
+        }
+        sc.close();
     }
 }
