@@ -343,10 +343,10 @@ public class Trees {
         }
 
         // Prints the tree top-down, each node as [start-end]=sum, e.g. for {1, 2, 3}
-        //         [0-2]=6
-        //       /         \
-        //   [0-1]=3     [2-2]=3
-        //   /    \
+        // [0-2]=6
+        // / \
+        // [0-1]=3 [2-2]=3
+        // / \
         // [0-0]=1 [1-1]=2
         public void display() {
             if (root == null) {
@@ -424,4 +424,79 @@ public class Trees {
 
     }
 
+    /// -------------------------------------Leetcode-------------------------------------///
+
+    // LeetCode's binary tree node
+    public static class TreeNode {
+        int val;
+        TreeNode left, right;
+
+        public TreeNode() {
+        }
+
+        public TreeNode(int val) {
+            this.val = val;
+        }
+
+        public TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        }
+        if (p == null || q == null) {
+            return false;
+        }
+        if (p.val != q.val) {
+            return false;
+        }
+        boolean leftCheck = isSameTree(p.left, q.left);
+        boolean rightCheck = isSameTree(p.right, q.right);
+        return leftCheck && rightCheck;
+    }
+
+    public boolean isSymmetric(TreeNode root) {
+
+        if (root == null) {
+            return true;
+        }
+        return isMirror(root.left, root.right);
+
+    }
+
+    private boolean isMirror(TreeNode left, TreeNode right) {
+
+        if (left == null && right == null) {
+            return true;
+        }
+
+        if (left == null || right == null) {
+            return false;
+        }
+
+        return left.val == right.val && isMirror(left.left, right.right) && isMirror(left.right, right.left);
+    }
+
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        return buildBST(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode buildBST(int[] nums, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = start + (end - start) / 2;
+        TreeNode node = new TreeNode(nums[mid]);
+        node.left = buildBST(nums, start, mid - 1);
+        node.right = buildBST(nums, mid + 1, end);
+        return node;
+    }
 }
