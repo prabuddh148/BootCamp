@@ -3,7 +3,9 @@ package com.example.bootcamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.LinkedList;
 
 public class Trees {
 
@@ -499,4 +501,71 @@ public class Trees {
         node.right = buildBST(nums, mid + 1, end);
         return node;
     }
+
+    public boolean isBalanced(TreeNode root) {
+
+        boolean result = checkBalance(root);
+
+        return result;
+
+    }
+
+    private boolean checkBalance(TreeNode node) {
+        if (node == null) {
+            return true;
+        }
+
+        int leftHeight = getHeight(node.left);
+        int rightHeight = getHeight(node.right);
+
+        if (Math.abs(leftHeight - rightHeight) > 1) {
+            return false;
+        }
+
+        return checkBalance(node.left) && checkBalance(node.right);
+    }
+
+    private int getHeight(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        return Math.max(getHeight(node.left), getHeight(node.right)) + 1;
+    }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+
+        List<List<Integer>> result = new ArrayList<>();
+
+        if (root == null) {
+            return result;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+
+            // Everything in the queue right now belongs to the same level
+            int levelSize = queue.size();
+            List<Integer> level = new ArrayList<>();
+
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode current = queue.poll();
+                level.add(current.val);
+
+                if (current.left != null) {
+                    queue.offer(current.left);
+                }
+
+                if (current.right != null) {
+                    queue.offer(current.right);
+                }
+            }
+
+            result.add(level);
+        }
+
+        return result;
+    }
+
 }
