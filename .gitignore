@@ -27,3 +27,9 @@ target/
 # OS
 .DS_Store
 Thumbs.db
+
+# Replit
+.cache/
+.upm/
+.config/
+.local/
