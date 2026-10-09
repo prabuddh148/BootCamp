@@ -1,0 +1,6 @@
+modules = ["java-graalvm22.3"]
+entrypoint = "replit/Trees.java"
+run = "cd replit && javac Trees.java && java Trees"
+
+[nix]
+channel = "stable-24_05"
