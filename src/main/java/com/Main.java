@@ -207,8 +207,9 @@ public class Main {
         // tree.display();
 
         // Trees.BST bst = new Trees.BST();
-        // for (int x : new int[] { 50, 30, 70, 20, 40, 60, 80, 30 }) // last 30 is a duplicate
-        //     bst.insert(x);
+        // for (int x : new int[] { 50, 30, 70, 20, 40, 60, 80, 30 }) // last 30 is a
+        // duplicate
+        // bst.insert(x);
         // bst.display();
         // System.out.println("Height: " + bst.height()); // 3
 
@@ -218,7 +219,7 @@ public class Main {
         // int n = sc.nextInt();
         // System.out.print("Enter " + n + " values: ");
         // for (int i = 0; i < n; i++)
-        //     avl.insert(sc.nextInt());
+        // avl.insert(sc.nextInt());
         // sc.close();
         //
         // avl.display();

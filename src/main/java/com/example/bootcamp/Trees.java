@@ -2,6 +2,7 @@ package com.example.bootcamp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
@@ -11,11 +12,11 @@ public class Trees {
 
     private static class Node {
         int data;
-        Node left, right;
+        Node left, right, next;
 
         public Node(int data) {
             this.data = data;
-            left = right = null;
+            left = right = next = null;
         }
 
     }
@@ -568,4 +569,131 @@ public class Trees {
         return result;
     }
 
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> list = new ArrayList<>();
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            double sum = 0;
+            int levelSize = queue.size();
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode current = queue.poll();
+                sum += current.val;
+
+                if (current.left != null)
+                    queue.offer(current.left);
+                if (current.right != null)
+                    queue.offer(current.right);
+            }
+            list.add(sum / levelSize);
+
+        }
+
+        return list;
+    }
+
+    public TreeNode levelOrderSuccessor(TreeNode root, int target) {
+        if (root == null)
+            return null;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            TreeNode current = queue.poll();
+            if (current.left != null)
+                queue.offer(current.left);
+            if (current.right != null)
+                queue.offer(current.right);
+
+            if (current.val == target)
+                return queue.peek();
+        }
+        return null;
+    }
+
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        if (root == null) {
+            return result;
+        }
+        boolean reverse = false;
+
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            List<Integer> level = new ArrayList<>();
+
+            for (int i = 0; i < levelSize; i++) {
+
+                if (!reverse) {
+                    TreeNode current = queue.pollFirst();
+                    level.add(current.val);
+
+                    if (current.left != null) {
+                        queue.addLast(current.left);
+                    }
+
+                    if (current.right != null) {
+                        queue.addLast(current.right);
+                    }
+
+                } else {
+                    TreeNode current = queue.pollLast();
+                    level.add(current.val);
+                    if (current.right != null) {
+                        queue.addFirst(current.right);
+                    }
+
+                    if (current.left != null) {
+                        queue.addFirst(current.left);
+                    }
+
+                }
+
+            }
+            reverse = !reverse;
+
+            result.add(level);
+        }
+
+        return result;
+
+    }
+
+    public Node connect(Node root) {
+
+        List<List<Node>> result = new ArrayList<>();
+        Deque<Node> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+
+            int levelSize = queue.size();
+            List<Node> level = new ArrayList<>();
+
+            for (int i = 0; i < levelSize; i++) {
+                Node current = queue.poll();
+                level.add(current);
+                Node nextNode = (i < levelSize - 1) ? queue.peek() : null;
+                current.next = nextNode;
+
+                if (current.left != null) {
+                    queue.offer(current.left);
+                }
+
+                if (current.right != null) {
+                    queue.offer(current.right);
+                }
+            }
+
+            result.add(level);
+        }
+        return root;
+
+    }
 }
